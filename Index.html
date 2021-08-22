@@ -1,0 +1,219 @@
+<!doctype html>
+<html>
+<head>
+ <title>Demonstração visual de seno e cosseno</title>
+ 
+<script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+<body>
+
+      <h1><a href="https://ideiasesquecidas.com"> <img src=	"https://ideiasesquecidas.files.wordpress.com/2020/03/forgottenlogo.png" width="90" height = "50"></a> Demonstração visual  de seno e cosseno
+	
+	<button onclick="Desenhar()">Rodar</button>
+	</h1>
+<script type = "text/javascript">
+    var svg = d3.select("body")
+        .append("svg")
+        .attr("width", 1000)
+        .attr("height", 800);
+
+	var cx0;
+   var cy0;
+   var r0;
+   var i;
+   var theta;
+   var x1;
+   var x2;
+   var tempo;
+   var durt;
+	   
+	   
+	   cx0 = 200+310;
+	   cy0 = 310;
+	   r0 = 300;
+	   durt = 100;
+	   
+		//Círculo de referência
+		var circle1 = svg.append("circle")
+			.attr("cx", cx0)
+			.attr("cy", cy0)
+			.attr("r", r0)
+			.attr("fill", "white")
+			.attr("stroke", "black")
+
+		//Centro do círculo
+		var centro = svg.append("circle")
+			.attr("cx", cx0)
+			.attr("cy", cy0)
+			.attr("r", 3)
+			.attr("fill", "black")
+			.attr("stroke", "black")
+
+		//Eixo X	
+		var eixoX = svg.append("line")
+			.attr("x1", cx0-r0)
+			.attr("y1", cy0)
+			.attr("x2", cx0+r0)
+			.attr("y2", cy0)
+			.attr("stroke", "black")
+			.attr("stroke-opacity","0.5")
+
+		//Eixo Y	
+		var eixoY = svg.append("line")
+			.attr("x1", cx0)
+			.attr("y1", cy0-r0)
+			.attr("x2", cx0)
+			.attr("y2", cy0+r0)
+			.attr("stroke", "black")
+			.attr("stroke-opacity","0.5")		
+		//Raio	
+		var line1 = svg.append("line")
+			.attr("x1", cx0)
+			.attr("y1", cy0)
+			.attr("x2", cx0+r0)
+			.attr("y2", cy0)
+			.attr("stroke", "black")
+	   
+		//Projecao seno
+		var lineSin = svg.append("line")
+			.attr("x1", cx0)
+			.attr("y1", cy0)
+			.attr("x2", cx0+r0)
+			.attr("y2", cy0)
+			.attr("stroke", "red")
+			.attr("stroke-width", "4")
+		
+		//Projecao seno Auxiliar
+		var lineSinAux = svg.append("line")
+			.attr("x1", cx0)
+			.attr("y1", cy0)
+			.attr("x2", cx0+r0)
+			.attr("y2", cy0)
+			.attr("stroke", "red")
+			.attr("stroke-dasharray", "4 1")
+
+		//Projecao cosseno
+		var lineCos = svg.append("line")
+			.attr("x1", cx0)
+			.attr("y1", cy0)
+			.attr("x2", cx0+r0)
+			.attr("y2", cy0)
+			.attr("stroke", "blue")
+			.attr("stroke-width", "4")
+
+		var lineCosAux = svg.append("line")
+			.attr("x1", cx0)
+			.attr("y1", cy0)
+			.attr("x2", cx0)
+			.attr("y2", cy0)
+			.attr("stroke", "blue")
+			.attr("stroke-dasharray", "4 1")
+
+		//Ponta do raio
+		var ponta = svg.append("circle")
+			.attr("cx", cx0+r0)
+			.attr("cy", cy0)
+			.attr("r", 5)
+			.attr("fill", "black")
+			.attr("stroke", "black")
+
+	    Desenhar();
+		
+		
+		//Legenda
+		svg.append("line")
+			.attr("x1", 750)
+			.attr("y1", 10)
+			.attr("x2", 790)
+			.attr("y2", 10)			
+			.attr("stroke", "blue")
+			.attr("stroke-width", "4")
+		
+		svg.append("line")
+			.attr("x1", 750)
+			.attr("y1", 30)
+			.attr("x2", 790)
+			.attr("y2", 30)			
+			.attr("stroke", "red")
+			.attr("stroke-width", "4")
+			
+		svg.append("text")
+			.attr("x", 795)
+			.attr("y", 15)
+			.text("Seno")
+
+		svg.append("text")
+			.attr("x", 795)
+			.attr("y", 35)
+			.text("Coseno")
+
+	function Desenhar()
+	{
+		
+	  
+		//Parametros para o tempo
+		tempo=0;
+		for (i=0;i<=75;i++)
+		{
+
+			theta = 2*3.1415926*i/40;
+			x1 = r0*Math.cos(theta);
+			y1 = r0*Math.sin(theta);
+			tempo += 70; //tempo de transicao
+			
+			update(x1,y1,tempo);
+
+		}
+	}
+function update(x1, y1, tempo) {
+    ponta.transition()
+        .ease(d3.easeSin)
+        .duration(durt)
+		.delay(tempo)
+        .attr("cx",cx0+x1)
+		.attr("cy",cy0+y1)
+	
+    line1.transition()
+        .ease(d3.easeSin)
+        .duration(durt)
+		.delay(tempo)
+        .attr("x2", cx0+x1)
+		.attr("y2", cy0+y1)
+
+    lineSin.transition()
+        .ease(d3.easeSin)
+        .duration(durt)
+		.delay(tempo)
+        .attr("x2", cx0+x1)
+		.attr("y2", cy0)
+
+    lineSinAux.transition()
+        .ease(d3.easeSin)
+        .duration(durt)
+		.delay(tempo)
+        .attr("x1", cx0+x1)
+		//.attr("y1", cy0)
+		.attr("x2", cx0+x1)
+		.attr("y2", cy0+y1)
+
+    lineCos.transition()
+        .ease(d3.easeSin)
+        .duration(durt)
+		.delay(tempo)
+        .attr("x2", cx0)
+		.attr("y2", cy0+y1)
+
+    lineCosAux.transition()
+        .ease(d3.easeSin)
+        .duration(durt)
+		.delay(tempo)
+        .attr("x1", cx0)
+		.attr("y1", cy0+y1)
+		.attr("x2", cx0+x1)
+		.attr("y2", cy0+y1)
+
+}
+  
+  </script>
+</body>
+</html>
